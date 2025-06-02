@@ -1,12 +1,16 @@
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         try {
             File plik = new File("dane.txt");
+            File nowyplik = new File("wynik.txt");
+            FileWriter fileWriter = new FileWriter("wynik.txt");
+            nowyplik.createNewFile();
             Scanner scanner = new Scanner(plik);
-            String year, month, day, actualYear, linia;
+            String year, month, day, actualYear, linia, stringMonth = "", stringDay = "";
             String[] months = {"stycznia", "lutego", "marca", "kwietnia", "maja", "czerwca", "lipca", "sierpnia", "września", "października", "listopada", "grudnia"};
             char gender, k;
             int actualMonth, women = 0, men = 0,  born1950_1980 = 0, born1981_2000 = 0, born2001_2025 = 0, averageAgeCounter = 0, parsedYear;
@@ -58,6 +62,9 @@ public class Main {
                 actualMonth = Integer.parseInt(month);
                 while(actualMonth > 12) actualMonth -= 20;
                 System.out.print(months[actualMonth-1] + " " + actualYear + year + " roku.\n");
+                if(actualMonth < 10) stringMonth = "0" + actualMonth;
+                if(Integer.parseInt(day) < 10) stringDay = "0" + day;
+                fileWriter.write(actualYear + year + "-" + stringMonth + "-" + stringDay + "\n");
             }
             System.out.println("Ilość kobiet: " + women);
             System.out.println("Ilość mężczyzn: " + men);
@@ -65,6 +72,7 @@ public class Main {
             System.out.println("Ilość osób urodzonych w latach 1981-2000: " + born1981_2000);
             System.out.println("Ilość osób urodzonych w latach 2001-2025: " + born2001_2025);
             System.out.println("Średni wiek dla powyższych danych: " + (averageAge/averageAgeCounter));
+            fileWriter.close();
         }
         catch (IOException e) {
             System.out.println("Błąd zapisu.");
